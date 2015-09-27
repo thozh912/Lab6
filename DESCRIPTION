@@ -1,0 +1,15 @@
+Package: Lab6
+Type: Package
+Title: Performace code for knapsack problem
+Version: 1.0.0
+Date: 2015-09-27
+Authors@R: c(
+    person("Andrea", "Bruzzone", email = "andrea.bruzzone92@gmail.com", role = c("aut")),
+    person("Thomas", "Zhang", email = "thomaszhangswe@gmail.com", role = c("aut", "cre"))
+    )
+Description: This package contains performant code for the knapsack problem
+License: CC0
+Depends: R (>= 3.1.0)
+Suggests: knitr,
+    testthat
+VignetteBuilder: knitr
