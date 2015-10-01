@@ -1,4 +1,3 @@
-
 #' Brute force solver of Knapsack problem
 #' 
 #' This function solves the Knapsack probem by brute force.
