@@ -7,9 +7,10 @@ Authors@R: c(
     person("Andrea", "Bruzzone", email = "andrea.bruzzone92@gmail.com", role = c("aut")),
     person("Thomas", "Zhang", email = "thomaszhangswe@gmail.com", role = c("aut", "cre"))
     )
-Description: This package contains performant code for the knapsack problem
+Description: This package contains performant code for the knapsack problem.
 License: CC0
-Depends: R (>= 3.1.0)
+Imports:
+Depends: R (>= 3.1.0),
 Suggests: knitr,
     testthat
 VignetteBuilder: knitr
