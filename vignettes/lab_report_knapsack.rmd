@@ -17,43 +17,53 @@ The three functions take as input a Data frame with variables v and w, which hav
 ## Brute force search 
 This function solves the Knapsack probem by brute force.
 
-For example:
+For example. for n = 16 objects:
+```{r, echo = FALSE, message = FALSE}
+library(Lab6)
+```
+
 ```{r}
-#brute_force_knapsack(data.frame(w=c(29,11,4,50,33,9,20,6 ),v=c(2,7,11,2,9,33,6,45 )),W =20)
+
+#system.time(brute_force_knapsack(knapsack_generator()[1:16,],W =2000))
+
 ```
 
+The brute force function takes around 27 seconds to run the algorithm for n = 16 objects.
 
-```{r, echo = FALSE}
-#Sys.time()
-#brute_force_knapsack(data.frame(w=c(29,11,4,50,33,9,20,6 ),v=c(2,7,11,2,9,33,6,45 )),W =20)
-#Sys.time()
-```
 
 ## Dynamic programming 
 This function solves the 0/1 Knapsack problem using dynamic programming.
-```{r}
 
+For example, for n = 500 objects: 
+```{r}
+#system.time(knapsack_dynamic(knapsack_generator()[1:500,],W =2000))
 ```
+
+The dynamic function takes around 38 seconds to run the algorithm for n = 500 objects.
+
 
 ## Greedy heuristic
 This function solves the Knapsack problem using a greedy heuristic approach. It does not return an exact result but is computationally faster than the other approaches in this package. 
 
+For example, for n = 1000000 objects: 
+```{r}
+#system.time(greedy_knapsack(knapsack_generator()[1:1000000,],W =2000))
+```
+
+The greedy heuristic function takes around 50 seconds to run the algorithm for n = 1000000 objects.
+
+
+## Profiling
+We try to improve this appaling performance. Using the Rprof we discovered that the problem is the use of the data frame, in fact replacing the data frame with matrix the functions are faster.
+
 ```{r}
 
 ```
 
 
-## Profiling
-
-
-
-```{r, echo=FALSE}
-
-```
-
 ## Parallelize Brute force search 
 We added an argument, `parallel`, in the brute force function that when it is set to TRUE the function parallelize over the multiple cores. We used a computer with 8 cores.
 
-```{r, echo=FALSE}
-
+```{r}
+#system.time(brute_force_knapsack(knapsack_generator()[1:16,],W =2000), parallel = TRUE)
 ```

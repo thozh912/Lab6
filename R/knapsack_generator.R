@@ -12,7 +12,7 @@
 
 knapsack_generator<-function(){
   set.seed(42)
-  n <- 2000
+  n <- 1000000
   knapsack_objects <-
     data.frame(
       w=sample(1:4000, size = n, replace = TRUE),

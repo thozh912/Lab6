@@ -8,7 +8,7 @@ knapsack_generator()
 }
 \value{
 \code{knapsack_objects} A dataframe with two columns, w and v
-containing values for use in the knapsack problem.
+containing weights and values for use in the knapsack problem.
 }
 \description{
 This function is the knapsack value generator in the Lab instructions

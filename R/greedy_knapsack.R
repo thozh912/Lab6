@@ -13,7 +13,8 @@
 #'  and \code{$elements} which indicates which row objects in data.frame \code{x} was put
 #'  in the knapsack.
 #'  
-#'  @example greedy_knapsack(data.frame(w=c(20,30,40,50),v=c(2,2,1,2),z=c(23,4,9,1)),W =200)
+#'  @examples greedy_knapsack(data.frame(w=c(20,30,40,50),v=c(2,2,1,2)), W =200)
+#'
 #'  
 #'  @references \url{http://en.wikipedia.org/wiki/Knapsack_problem} 
 
