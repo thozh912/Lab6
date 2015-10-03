@@ -66,23 +66,189 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <div id="brute-force-search" class="section level2">
 <h2>Brute force search</h2>
 <p>This function solves the Knapsack probem by brute force.</p>
-<p>For example:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#brute_force_knapsack(data.frame(w=c(29,11,4,50,33,9,20,6 ),v=c(2,7,11,2,9,33,6,45 )),W =20)</span></code></pre>
+<p>For example. for n = 16 objects:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#system.time(brute_force_knapsack(knapsack_generator()[1:16,],W =2000))</span></code></pre>
+<p>The brute force function takes around 27 seconds to run the algorithm for n = 16 objects.</p>
 </div>
 <div id="dynamic-programming" class="section level2">
 <h2>Dynamic programming</h2>
 <p>This function solves the 0/1 Knapsack problem using dynamic programming.</p>
+<p>For example, for n = 500 objects:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#system.time(knapsack_dynamic(knapsack_generator()[1:500,],W =2000))</span></code></pre>
+<p>The dynamic function takes around 38 seconds to run the algorithm for n = 500 objects.</p>
 </div>
 <div id="greedy-heuristic" class="section level2">
 <h2>Greedy heuristic</h2>
 <p>This function solves the Knapsack problem using a greedy heuristic approach. It does not return an exact result but is computationally faster than the other approaches in this package.</p>
+<p>For example, for n = 1000000 objects:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#system.time(greedy_knapsack(knapsack_generator()[1:1000000,],W =2000))</span></code></pre>
+<p>The greedy heuristic function takes around 50 seconds to run the algorithm for n = 1000000 objects.</p>
 </div>
 <div id="profiling" class="section level2">
 <h2>Profiling</h2>
+<p>We try to improve this appaling performance. Using the Rprof we discovered that the problem is the use of the data frame, in fact replacing the data frame with matrix the functions are faster.</p>
+<pre class="sourceCode r"><code class="sourceCode r">tmp &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
+<span class="kw">Rprof</span>(tmp,<span class="dt">interval =</span> <span class="fl">0.001</span>)
+<span class="kw">brute_force_knapsack</span>(knapsack_matr[<span class="dv">1</span>:<span class="dv">15</span>,], <span class="dt">W =</span> <span class="dv">2000</span>)</code></pre>
+<pre><code>## $value
+##     v 
+## 12634 
+## 
+## $elements
+## [1] 3 8</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Rprof</span>(<span class="ot">NULL</span>)
+<span class="kw">summaryRprof</span>(tmp)</code></pre>
+<pre><code>## $by.self
+##                        self.time self.pct total.time total.pct
+## &quot;brute_force_knapsack&quot;     0.297    72.26      0.410     99.76
+## &quot;==&quot;                       0.062    15.09      0.062     15.09
+## &quot;+&quot;                        0.030     7.30      0.030      7.30
+## &quot;c&quot;                        0.007     1.70      0.007      1.70
+## &quot;:&quot;                        0.005     1.22      0.005      1.22
+## &quot;intToBits&quot;                0.003     0.73      0.003      0.73
+## &quot;&lt;=&quot;                       0.002     0.49      0.002      0.49
+## &quot;&amp;&quot;                        0.001     0.24      0.001      0.24
+## &quot;&gt;&quot;                        0.001     0.24      0.001      0.24
+## &quot;^&quot;                        0.001     0.24      0.001      0.24
+## &quot;length&quot;                   0.001     0.24      0.001      0.24
+## &quot;match.arg&quot;                0.001     0.24      0.001      0.24
+## 
+## $by.total
+##                                  total.time total.pct self.time self.pct
+## &quot;&lt;Anonymous&gt;&quot;                         0.411    100.00     0.000     0.00
+## &quot;FUN&quot;                                 0.411    100.00     0.000     0.00
+## &quot;block_exec&quot;                          0.411    100.00     0.000     0.00
+## &quot;call_block&quot;                          0.411    100.00     0.000     0.00
+## &quot;evaluate_call&quot;                       0.411    100.00     0.000     0.00
+## &quot;force&quot;                               0.411    100.00     0.000     0.00
+## &quot;in_dir&quot;                              0.411    100.00     0.000     0.00
+## &quot;lapply&quot;                              0.411    100.00     0.000     0.00
+## &quot;process_file&quot;                        0.411    100.00     0.000     0.00
+## &quot;process_group&quot;                       0.411    100.00     0.000     0.00
+## &quot;process_group.block&quot;                 0.411    100.00     0.000     0.00
+## &quot;roc_output&quot;                          0.411    100.00     0.000     0.00
+## &quot;roc_output.vignette&quot;                 0.411    100.00     0.000     0.00
+## &quot;suppressPackageStartupMessages&quot;      0.411    100.00     0.000     0.00
+## &quot;unlist&quot;                              0.411    100.00     0.000     0.00
+## &quot;vapply&quot;                              0.411    100.00     0.000     0.00
+## &quot;vign_update_all&quot;                     0.411    100.00     0.000     0.00
+## &quot;vweave_rmarkdown&quot;                    0.411    100.00     0.000     0.00
+## &quot;withCallingHandlers&quot;                 0.411    100.00     0.000     0.00
+## &quot;with_envvar&quot;                         0.411    100.00     0.000     0.00
+## &quot;brute_force_knapsack&quot;                0.410     99.76     0.297    72.26
+## &quot;eval&quot;                                0.410     99.76     0.000     0.00
+## &quot;handle&quot;                              0.410     99.76     0.000     0.00
+## &quot;withVisible&quot;                         0.410     99.76     0.000     0.00
+## &quot;==&quot;                                  0.062     15.09     0.062    15.09
+## &quot;+&quot;                                   0.030      7.30     0.030     7.30
+## &quot;c&quot;                                   0.007      1.70     0.007     1.70
+## &quot;:&quot;                                   0.005      1.22     0.005     1.22
+## &quot;intToBits&quot;                           0.003      0.73     0.003     0.73
+## &quot;&lt;=&quot;                                  0.002      0.49     0.002     0.49
+## &quot;&amp;&quot;                                   0.001      0.24     0.001     0.24
+## &quot;&gt;&quot;                                   0.001      0.24     0.001     0.24
+## &quot;^&quot;                                   0.001      0.24     0.001     0.24
+## &quot;length&quot;                              0.001      0.24     0.001     0.24
+## &quot;match.arg&quot;                           0.001      0.24     0.001     0.24
+## &quot;setHook&quot;                             0.001      0.24     0.000     0.00
+## &quot;set_hooks&quot;                           0.001      0.24     0.000     0.00
+## 
+## $sample.interval
+## [1] 0.001
+## 
+## $sampling.time
+## [1] 0.411</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">tmp &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
+<span class="kw">Rprof</span>(tmp,<span class="dt">interval =</span> <span class="fl">0.001</span>)
+<span class="kw">brute_force_knapsack</span>(knapsack_df[<span class="dv">1</span>:<span class="dv">15</span>,], <span class="dt">W =</span> <span class="dv">2000</span>)</code></pre>
+<pre><code>## $value
+## [1] 12634
+## 
+## $elements
+## [1] 3 8</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Rprof</span>(<span class="ot">NULL</span>)
+<span class="kw">summaryRprof</span>(tmp)</code></pre>
+<pre><code>## $by.self
+##                        self.time self.pct total.time total.pct
+## &quot;[.data.frame&quot;             0.723    46.08      1.240     79.03
+## &quot;brute_force_knapsack&quot;     0.188    11.98      1.569    100.00
+## &quot;names&quot;                    0.134     8.54      0.134      8.54
+## &quot;match&quot;                    0.087     5.54      0.171     10.90
+## &quot;length&quot;                   0.072     4.59      0.072      4.59
+## &quot;[&quot;                        0.071     4.53      1.311     83.56
+## &quot;%in%&quot;                     0.064     4.08      0.235     14.98
+## &quot;sys.call&quot;                 0.062     3.95      0.062      3.95
+## &quot;==&quot;                       0.045     2.87      0.045      2.87
+## &quot;.subset&quot;                  0.031     1.98      0.031      1.98
+## &quot;all&quot;                      0.020     1.27      0.020      1.27
+## &quot;anyNA&quot;                    0.020     1.27      0.020      1.27
+## &quot;c&quot;                        0.016     1.02      0.016      1.02
+## &quot;.subset2&quot;                 0.011     0.70      0.011      0.70
+## &quot;+&quot;                        0.007     0.45      0.007      0.45
+## &quot;dim&quot;                      0.005     0.32      0.005      0.32
+## &quot;nargs&quot;                    0.005     0.32      0.005      0.32
+## &quot;&amp;&quot;                        0.003     0.19      0.003      0.19
+## &quot;:&quot;                        0.002     0.13      0.002      0.13
+## &quot;intToBits&quot;                0.002     0.13      0.002      0.13
+## &quot;attr&quot;                     0.001     0.06      0.001      0.06
+## 
+## $by.total
+##                                  total.time total.pct self.time self.pct
+## &quot;brute_force_knapsack&quot;                1.569    100.00     0.188    11.98
+## &quot;&lt;Anonymous&gt;&quot;                         1.569    100.00     0.000     0.00
+## &quot;FUN&quot;                                 1.569    100.00     0.000     0.00
+## &quot;block_exec&quot;                          1.569    100.00     0.000     0.00
+## &quot;call_block&quot;                          1.569    100.00     0.000     0.00
+## &quot;eval&quot;                                1.569    100.00     0.000     0.00
+## &quot;evaluate_call&quot;                       1.569    100.00     0.000     0.00
+## &quot;force&quot;                               1.569    100.00     0.000     0.00
+## &quot;handle&quot;                              1.569    100.00     0.000     0.00
+## &quot;in_dir&quot;                              1.569    100.00     0.000     0.00
+## &quot;lapply&quot;                              1.569    100.00     0.000     0.00
+## &quot;process_file&quot;                        1.569    100.00     0.000     0.00
+## &quot;process_group&quot;                       1.569    100.00     0.000     0.00
+## &quot;process_group.block&quot;                 1.569    100.00     0.000     0.00
+## &quot;roc_output&quot;                          1.569    100.00     0.000     0.00
+## &quot;roc_output.vignette&quot;                 1.569    100.00     0.000     0.00
+## &quot;suppressPackageStartupMessages&quot;      1.569    100.00     0.000     0.00
+## &quot;unlist&quot;                              1.569    100.00     0.000     0.00
+## &quot;vapply&quot;                              1.569    100.00     0.000     0.00
+## &quot;vign_update_all&quot;                     1.569    100.00     0.000     0.00
+## &quot;vweave_rmarkdown&quot;                    1.569    100.00     0.000     0.00
+## &quot;withCallingHandlers&quot;                 1.569    100.00     0.000     0.00
+## &quot;withVisible&quot;                         1.569    100.00     0.000     0.00
+## &quot;with_envvar&quot;                         1.569    100.00     0.000     0.00
+## &quot;[&quot;                                   1.311     83.56     0.071     4.53
+## &quot;[.data.frame&quot;                        1.240     79.03     0.723    46.08
+## &quot;%in%&quot;                                0.235     14.98     0.064     4.08
+## &quot;match&quot;                               0.171     10.90     0.087     5.54
+## &quot;names&quot;                               0.134      8.54     0.134     8.54
+## &quot;length&quot;                              0.072      4.59     0.072     4.59
+## &quot;sys.call&quot;                            0.062      3.95     0.062     3.95
+## &quot;==&quot;                                  0.045      2.87     0.045     2.87
+## &quot;.subset&quot;                             0.031      1.98     0.031     1.98
+## &quot;all&quot;                                 0.020      1.27     0.020     1.27
+## &quot;anyNA&quot;                               0.020      1.27     0.020     1.27
+## &quot;c&quot;                                   0.016      1.02     0.016     1.02
+## &quot;.subset2&quot;                            0.011      0.70     0.011     0.70
+## &quot;+&quot;                                   0.007      0.45     0.007     0.45
+## &quot;dim&quot;                                 0.005      0.32     0.005     0.32
+## &quot;nargs&quot;                               0.005      0.32     0.005     0.32
+## &quot;&amp;&quot;                                   0.003      0.19     0.003     0.19
+## &quot;:&quot;                                   0.002      0.13     0.002     0.13
+## &quot;intToBits&quot;                           0.002      0.13     0.002     0.13
+## &quot;attr&quot;                                0.001      0.06     0.001     0.06
+## 
+## $sample.interval
+## [1] 0.001
+## 
+## $sampling.time
+## [1] 1.569</code></pre>
 </div>
 <div id="parallelize-brute-force-search" class="section level2">
 <h2>Parallelize Brute force search</h2>
 <p>We added an argument, <code>parallel</code>, in the brute force function that when it is set to TRUE the function parallelize over the multiple cores. We used a computer with 8 cores.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#system.time(brute_force_knapsack(knapsack_generator()[1:16,],W =2000), parallel = TRUE)</span></code></pre>
 </div>
 
 

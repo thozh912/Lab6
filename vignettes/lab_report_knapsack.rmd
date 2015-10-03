@@ -56,10 +56,32 @@ The greedy heuristic function takes around 50 seconds to run the algorithm for n
 ## Profiling
 We try to improve this appaling performance. Using the Rprof we discovered that the problem is the use of the data frame, in fact replacing the data frame with matrix the functions are faster.
 
-```{r}
+For example for the brute force function:
 
+```{r,echo=FALSE}
+
+knapsack_matr <- knapsack_gener_matr()
+knapsack_df <- knapsack_generator()
 ```
 
+```{r}
+
+
+tmp <- tempfile()
+Rprof(tmp,interval = 0.001)
+brute_force_knapsack(knapsack_matr[1:15,], W = 2000)
+Rprof(NULL)
+summaryRprof(tmp)
+
+
+tmp <- tempfile()
+Rprof(tmp,interval = 0.001)
+brute_force_knapsack(knapsack_df[1:15,], W = 2000)
+Rprof(NULL)
+summaryRprof(tmp)
+```
+
+It can be seen that using the matrix the function is faster of more than 1 second.
 
 ## Parallelize Brute force search 
 We added an argument, `parallel`, in the brute force function that when it is set to TRUE the function parallelize over the multiple cores. We used a computer with 8 cores.
