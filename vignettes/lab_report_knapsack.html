@@ -66,198 +66,126 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <div id="brute-force-search" class="section level2">
 <h2>Brute force search</h2>
 <p>This function solves the Knapsack probem by brute force.</p>
-<p>For example. for n = 16 objects:</p>
+<p>For example. for <code>n = 16</code> objects:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">#system.time(brute_force_knapsack(knapsack_generator()[1:16,],W =2000))</span></code></pre>
 <p>The brute force function takes around 27 seconds to run the algorithm for n = 16 objects.</p>
 </div>
 <div id="dynamic-programming" class="section level2">
 <h2>Dynamic programming</h2>
 <p>This function solves the 0/1 Knapsack problem using dynamic programming.</p>
-<p>For example, for n = 500 objects:</p>
+<p>For example, for <code>n = 500</code> objects:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">#system.time(knapsack_dynamic(knapsack_generator()[1:500,],W =2000))</span></code></pre>
-<p>The dynamic function takes around 38 seconds to run the algorithm for n = 500 objects.</p>
+<p>The dynamic function takes around 38 seconds to run the algorithm for <code>n = 500</code> objects.</p>
 </div>
 <div id="greedy-heuristic" class="section level2">
 <h2>Greedy heuristic</h2>
 <p>This function solves the Knapsack problem using a greedy heuristic approach. It does not return an exact result but is computationally faster than the other approaches in this package.</p>
-<p>For example, for n = 1000000 objects:</p>
+<p>For example, for <code>n = 1000000</code> objects:</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co">#system.time(greedy_knapsack(knapsack_generator()[1:1000000,],W =2000))</span></code></pre>
-<p>The greedy heuristic function takes around 50 seconds to run the algorithm for n = 1000000 objects.</p>
+<p>The greedy heuristic function takes around 50 seconds to run the algorithm for <code>n = 1000000</code> objects.</p>
 </div>
 <div id="profiling" class="section level2">
 <h2>Profiling</h2>
 <p>We try to improve this appaling performance. Using the Rprof we discovered that the problem is the use of the data frame, in fact replacing the data frame with matrix the functions are faster.</p>
 <p>For example for the brute force function:</p>
-<pre class="sourceCode r"><code class="sourceCode r"> tmp &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
- <span class="kw">Rprof</span>(tmp,<span class="dt">interval =</span> <span class="fl">0.001</span>)
- <span class="kw">brute_force_knapsack</span>(knapsack_matr[<span class="dv">1</span>:<span class="dv">15</span>,], <span class="dt">W =</span> <span class="dv">2000</span>)</code></pre>
-<pre><code>## $value
-##    v 
-## 4623 
-## 
-## $elements
-## [1] 15</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">Rprof</span>(<span class="ot">NULL</span>)
- <span class="kw">summaryRprof</span>(tmp)</code></pre>
-<pre><code>## $by.self
-##                        self.time self.pct total.time total.pct
-## &quot;brute_force_knapsack&quot;     0.507    74.67      0.678     99.85
-## &quot;==&quot;                       0.066     9.72      0.066      9.72
-## &quot;+&quot;                        0.049     7.22      0.049      7.22
-## &quot;c&quot;                        0.032     4.71      0.032      4.71
-## &quot;&lt;=&quot;                       0.007     1.03      0.007      1.03
-## &quot;intToBits&quot;                0.006     0.88      0.006      0.88
-## &quot;&amp;&quot;                        0.005     0.74      0.005      0.74
-## &quot;&gt;&quot;                        0.003     0.44      0.003      0.44
-## &quot;:&quot;                        0.002     0.29      0.002      0.29
-## &quot;^&quot;                        0.001     0.15      0.001      0.15
-## &quot;print.default&quot;            0.001     0.15      0.001      0.15
-## 
-## $by.total
-##                                  total.time total.pct self.time self.pct
-## &quot;&lt;Anonymous&gt;&quot;                         0.679    100.00     0.000     0.00
-## &quot;FUN&quot;                                 0.679    100.00     0.000     0.00
-## &quot;block_exec&quot;                          0.679    100.00     0.000     0.00
-## &quot;call_block&quot;                          0.679    100.00     0.000     0.00
-## &quot;evaluate_call&quot;                       0.679    100.00     0.000     0.00
-## &quot;force&quot;                               0.679    100.00     0.000     0.00
-## &quot;handle&quot;                              0.679    100.00     0.000     0.00
-## &quot;in_dir&quot;                              0.679    100.00     0.000     0.00
-## &quot;lapply&quot;                              0.679    100.00     0.000     0.00
-## &quot;process_file&quot;                        0.679    100.00     0.000     0.00
-## &quot;process_group&quot;                       0.679    100.00     0.000     0.00
-## &quot;process_group.block&quot;                 0.679    100.00     0.000     0.00
-## &quot;roc_output&quot;                          0.679    100.00     0.000     0.00
-## &quot;roc_output.vignette&quot;                 0.679    100.00     0.000     0.00
-## &quot;suppressPackageStartupMessages&quot;      0.679    100.00     0.000     0.00
-## &quot;unlist&quot;                              0.679    100.00     0.000     0.00
-## &quot;vapply&quot;                              0.679    100.00     0.000     0.00
-## &quot;vign_update_all&quot;                     0.679    100.00     0.000     0.00
-## &quot;vweave_rmarkdown&quot;                    0.679    100.00     0.000     0.00
-## &quot;withCallingHandlers&quot;                 0.679    100.00     0.000     0.00
-## &quot;withVisible&quot;                         0.679    100.00     0.000     0.00
-## &quot;with_envvar&quot;                         0.679    100.00     0.000     0.00
-## &quot;brute_force_knapsack&quot;                0.678     99.85     0.507    74.67
-## &quot;eval&quot;                                0.678     99.85     0.000     0.00
-## &quot;==&quot;                                  0.066      9.72     0.066     9.72
-## &quot;+&quot;                                   0.049      7.22     0.049     7.22
-## &quot;c&quot;                                   0.032      4.71     0.032     4.71
-## &quot;&lt;=&quot;                                  0.007      1.03     0.007     1.03
-## &quot;intToBits&quot;                           0.006      0.88     0.006     0.88
-## &quot;&amp;&quot;                                   0.005      0.74     0.005     0.74
-## &quot;&gt;&quot;                                   0.003      0.44     0.003     0.44
-## &quot;:&quot;                                   0.002      0.29     0.002     0.29
-## &quot;^&quot;                                   0.001      0.15     0.001     0.15
-## &quot;print.default&quot;                       0.001      0.15     0.001     0.15
-## &quot;fun&quot;                                 0.001      0.15     0.000     0.00
-## &quot;knit_print.default&quot;                  0.001      0.15     0.000     0.00
-## &quot;normal_print&quot;                        0.001      0.15     0.000     0.00
-## &quot;print&quot;                               0.001      0.15     0.000     0.00
-## &quot;value_fun&quot;                           0.001      0.15     0.000     0.00
-## 
-## $sample.interval
-## [1] 0.001
-## 
-## $sampling.time
-## [1] 0.679</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"> tmp &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
- <span class="kw">Rprof</span>(tmp,<span class="dt">interval =</span> <span class="fl">0.001</span>)
- <span class="kw">brute_force_knapsack</span>(knapsack_df[<span class="dv">1</span>:<span class="dv">15</span>,], <span class="dt">W =</span> <span class="dv">2000</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">tmp &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
+<span class="kw">Rprof</span>(tmp,<span class="dt">interval =</span> <span class="fl">0.01</span>)
+<span class="kw">brute_force_knapsack</span>(knapsack_matr[<span class="dv">1</span>:<span class="dv">15</span>,], <span class="dt">W =</span> <span class="dv">2000</span>)</code></pre>
 <pre><code>## $value
 ## [1] 4623
 ## 
 ## $elements
 ## [1] 15</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">Rprof</span>(<span class="ot">NULL</span>)
- <span class="kw">summaryRprof</span>(tmp)</code></pre>
-<pre><code>## $by.self
-##                        self.time self.pct total.time total.pct
-## &quot;[.data.frame&quot;             1.365    45.03      2.429     80.14
-## &quot;brute_force_knapsack&quot;     0.326    10.76      3.030     99.97
-## &quot;match&quot;                    0.216     7.13      0.386     12.74
-## &quot;names&quot;                    0.208     6.86      0.208      6.86
-## &quot;length&quot;                   0.161     5.31      0.161      5.31
-## &quot;sys.call&quot;                 0.144     4.75      0.144      4.75
-## &quot;[&quot;                        0.136     4.49      2.565     84.63
-## &quot;%in%&quot;                     0.131     4.32      0.517     17.06
-## &quot;==&quot;                       0.087     2.87      0.087      2.87
-## &quot;.subset&quot;                  0.078     2.57      0.078      2.57
-## &quot;all&quot;                      0.047     1.55      0.047      1.55
-## &quot;.subset2&quot;                 0.031     1.02      0.031      1.02
-## &quot;c&quot;                        0.025     0.82      0.025      0.82
-## &quot;anyNA&quot;                    0.019     0.63      0.019      0.63
-## &quot;+&quot;                        0.014     0.46      0.014      0.46
-## &quot;nargs&quot;                    0.012     0.40      0.012      0.40
-## &quot;intToBits&quot;                0.011     0.36      0.011      0.36
-## &quot;dim&quot;                      0.010     0.33      0.010      0.33
-## &quot;:&quot;                        0.005     0.16      0.005      0.16
-## &quot;&amp;&quot;                        0.003     0.10      0.003      0.10
-## &quot;.External2&quot;               0.001     0.03      0.001      0.03
-## &quot;attr&quot;                     0.001     0.03      0.001      0.03
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Rprof</span>(<span class="ot">NULL</span>)
+<span class="kw">summaryRprof</span>(tmp)$by.self</code></pre>
+<pre><code>##                        self.time self.pct total.time total.pct
+## &quot;brute_force_knapsack&quot;      1.25    76.22       1.64    100.00
+## &quot;==&quot;                        0.14     8.54       0.14      8.54
+## &quot;+&quot;                         0.09     5.49       0.09      5.49
+## &quot;c&quot;                         0.05     3.05       0.05      3.05
+## &quot;&gt;&quot;                         0.04     2.44       0.04      2.44
+## &quot;intToBits&quot;                 0.03     1.83       0.03      1.83
+## &quot;&amp;&quot;                         0.01     0.61       0.01      0.61
+## &quot;:&quot;                         0.01     0.61       0.01      0.61
+## &quot;&lt;=&quot;                        0.01     0.61       0.01      0.61
+## &quot;length&quot;                    0.01     0.61       0.01      0.61</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">tmp &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
+<span class="kw">Rprof</span>(tmp,<span class="dt">interval =</span> <span class="fl">0.01</span>)
+<span class="kw">brute_force_knapsack</span>(knapsack_df[<span class="dv">1</span>:<span class="dv">15</span>,], <span class="dt">W =</span> <span class="dv">2000</span>)</code></pre>
+<pre><code>## $value
+## [1] 4623
 ## 
-## $by.total
-##                                  total.time total.pct self.time self.pct
-## &quot;&lt;Anonymous&gt;&quot;                         3.031    100.00     0.000     0.00
-## &quot;FUN&quot;                                 3.031    100.00     0.000     0.00
-## &quot;block_exec&quot;                          3.031    100.00     0.000     0.00
-## &quot;call_block&quot;                          3.031    100.00     0.000     0.00
-## &quot;evaluate_call&quot;                       3.031    100.00     0.000     0.00
-## &quot;force&quot;                               3.031    100.00     0.000     0.00
-## &quot;in_dir&quot;                              3.031    100.00     0.000     0.00
-## &quot;lapply&quot;                              3.031    100.00     0.000     0.00
-## &quot;process_file&quot;                        3.031    100.00     0.000     0.00
-## &quot;process_group&quot;                       3.031    100.00     0.000     0.00
-## &quot;process_group.block&quot;                 3.031    100.00     0.000     0.00
-## &quot;roc_output&quot;                          3.031    100.00     0.000     0.00
-## &quot;roc_output.vignette&quot;                 3.031    100.00     0.000     0.00
-## &quot;suppressPackageStartupMessages&quot;      3.031    100.00     0.000     0.00
-## &quot;unlist&quot;                              3.031    100.00     0.000     0.00
-## &quot;vapply&quot;                              3.031    100.00     0.000     0.00
-## &quot;vign_update_all&quot;                     3.031    100.00     0.000     0.00
-## &quot;vweave_rmarkdown&quot;                    3.031    100.00     0.000     0.00
-## &quot;withCallingHandlers&quot;                 3.031    100.00     0.000     0.00
-## &quot;with_envvar&quot;                         3.031    100.00     0.000     0.00
-## &quot;brute_force_knapsack&quot;                3.030     99.97     0.326    10.76
-## &quot;eval&quot;                                3.030     99.97     0.000     0.00
-## &quot;handle&quot;                              3.030     99.97     0.000     0.00
-## &quot;withVisible&quot;                         3.030     99.97     0.000     0.00
-## &quot;[&quot;                                   2.565     84.63     0.136     4.49
-## &quot;[.data.frame&quot;                        2.429     80.14     1.365    45.03
-## &quot;%in%&quot;                                0.517     17.06     0.131     4.32
-## &quot;match&quot;                               0.386     12.74     0.216     7.13
-## &quot;names&quot;                               0.208      6.86     0.208     6.86
-## &quot;length&quot;                              0.161      5.31     0.161     5.31
-## &quot;sys.call&quot;                            0.144      4.75     0.144     4.75
-## &quot;==&quot;                                  0.087      2.87     0.087     2.87
-## &quot;.subset&quot;                             0.078      2.57     0.078     2.57
-## &quot;all&quot;                                 0.047      1.55     0.047     1.55
-## &quot;.subset2&quot;                            0.031      1.02     0.031     1.02
-## &quot;c&quot;                                   0.025      0.82     0.025     0.82
-## &quot;anyNA&quot;                               0.019      0.63     0.019     0.63
-## &quot;+&quot;                                   0.014      0.46     0.014     0.46
-## &quot;nargs&quot;                               0.012      0.40     0.012     0.40
-## &quot;intToBits&quot;                           0.011      0.36     0.011     0.36
-## &quot;dim&quot;                                 0.010      0.33     0.010     0.33
-## &quot;:&quot;                                   0.005      0.16     0.005     0.16
-## &quot;&amp;&quot;                                   0.003      0.10     0.003     0.10
-## &quot;.External2&quot;                          0.001      0.03     0.001     0.03
-## &quot;attr&quot;                                0.001      0.03     0.001     0.03
-## &quot;handle_output&quot;                       0.001      0.03     0.000     0.00
-## &quot;plot_snapshot&quot;                       0.001      0.03     0.000     0.00
-## &quot;recordPlot&quot;                          0.001      0.03     0.000     0.00
-## 
-## $sample.interval
-## [1] 0.001
-## 
-## $sampling.time
-## [1] 3.031</code></pre>
-<p>It can be seen that using the matrix the function is faster of more than 1 second.</p>
+## $elements
+## [1] 15</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Rprof</span>(<span class="ot">NULL</span>)
+<span class="kw">summaryRprof</span>(tmp)$by.self</code></pre>
+<pre><code>##                        self.time self.pct total.time total.pct
+## &quot;[.data.frame&quot;              4.17    47.88       7.05     80.94
+## &quot;brute_force_knapsack&quot;      1.01    11.60       8.71    100.00
+## &quot;match&quot;                     0.52     5.97       1.06     12.17
+## &quot;names&quot;                     0.50     5.74       0.50      5.74
+## &quot;sys.call&quot;                  0.48     5.51       0.48      5.51
+## &quot;length&quot;                    0.46     5.28       0.46      5.28
+## &quot;%in%&quot;                      0.31     3.56       1.37     15.73
+## &quot;[&quot;                         0.30     3.44       7.35     84.39
+## &quot;==&quot;                        0.25     2.87       0.25      2.87
+## &quot;.subset&quot;                   0.23     2.64       0.23      2.64
+## &quot;all&quot;                       0.11     1.26       0.11      1.26
+## &quot;anyNA&quot;                     0.09     1.03       0.09      1.03
+## &quot;c&quot;                         0.08     0.92       0.08      0.92
+## &quot;dim&quot;                       0.06     0.69       0.06      0.69
+## &quot;.subset2&quot;                  0.05     0.57       0.05      0.57
+## &quot;+&quot;                         0.04     0.46       0.04      0.46
+## &quot;nargs&quot;                     0.03     0.34       0.03      0.34
+## &quot;&amp;&quot;                         0.01     0.11       0.01      0.11
+## &quot;:&quot;                         0.01     0.11       0.01      0.11</code></pre>
+<p>It can be seen that using the matrix the function is alot faster. Further improvements which the profiling suggests are possible include replacing / division in the greedy knapsack algorithm with a division algorithm of some sort. Attempts at replacing the <code>max()</code> function in the dynamic programming algorithm with <code>if</code> block did not improve performance.</p>
 </div>
 <div id="parallelize-brute-force-search" class="section level2">
 <h2>Parallelize Brute force search</h2>
 <p>We added an argument, <code>parallel</code>, in the brute force function that when it is set to TRUE the function parallelize over the multiple cores. We used a computer with 8 cores.</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#system.time(brute_force_knapsack(knapsack_generator()[1:16,],W =2000, parallel = TRUE))</span></code></pre>
-<p>The time to compute this function is less than a second. The time for the same function without parallelizing was about 28 seconds so it can be seen that the performance is improved.</p>
+<pre class="sourceCode r"><code class="sourceCode r">  tmp &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
+  <span class="kw">Rprof</span>(tmp,<span class="dt">interval =</span> <span class="fl">0.01</span>)
+  <span class="kw">brute_force_knapsack</span>(knapsack_matr[<span class="dv">1</span>:<span class="dv">10</span>,], <span class="dt">W =</span> <span class="dv">2000</span>, <span class="dt">parallel =</span> <span class="ot">TRUE</span>)</code></pre>
+<pre><code>## $value
+## [1] 4208
+## 
+## $elements
+## [1] 3 8</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">  <span class="kw">Rprof</span>(<span class="ot">NULL</span>)
+  <span class="kw">summaryRprof</span>(tmp)$by.self</code></pre>
+<pre><code>##               self.time self.pct total.time total.pct
+## &quot;unserialize&quot;      0.06    37.50       0.06     37.50
+## &quot;unlist&quot;           0.03    18.75       0.16    100.00
+## &quot;&lt;Anonymous&gt;&quot;      0.02    12.50       0.16    100.00
+## &quot;mcfork&quot;           0.02    12.50       0.02     12.50
+## &quot;lapply&quot;           0.01     6.25       0.16    100.00
+## &quot;readChild&quot;        0.01     6.25       0.01      6.25
+## &quot;which&quot;            0.01     6.25       0.01      6.25</code></pre>
+<p>This function is torturously slow due mainly to its huge <code>expand.grid()</code> function call that it creates a lot of times. Let us try to manually create the very same indexing array which <code>expand.grid()</code> creates. We shall try a matrix.</p>
+<pre class="sourceCode r"><code class="sourceCode r">  tmp &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
+  <span class="kw">Rprof</span>(tmp,<span class="dt">interval =</span> <span class="fl">0.01</span>)
+  <span class="kw">alt_brute_force_knapsack</span>(knapsack_matr[<span class="dv">1</span>:<span class="dv">10</span>,], <span class="dt">W =</span> <span class="dv">2000</span>, <span class="dt">parallel =</span> <span class="ot">TRUE</span>)</code></pre>
+<pre><code>## $value
+## [1] 4208
+## 
+## $elements
+## [1] 3 8</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">  <span class="kw">Rprof</span>(<span class="ot">NULL</span>)
+  <span class="kw">summaryRprof</span>(tmp)$by.self</code></pre>
+<pre><code>##              self.time self.pct total.time total.pct
+## &quot;matrix&quot;         53.27    82.70      64.24     99.74
+## &quot;c&quot;              10.96    17.02      10.96     17.02
+## &quot;FUN&quot;             0.05     0.08      64.41    100.00
+## &quot;:&quot;               0.04     0.06       0.04      0.06
+## &quot;unlist&quot;          0.02     0.03      64.41    100.00
+## &quot;unname&quot;          0.02     0.03       0.02      0.03
+## &quot;-&quot;               0.01     0.02       0.01      0.02
+## &quot;Sys.getenv&quot;      0.01     0.02       0.01      0.02
+## &quot;length&quot;          0.01     0.02       0.01      0.02
+## &quot;list&quot;            0.01     0.02       0.01      0.02
+## &quot;which&quot;           0.01     0.02       0.01      0.02</code></pre>
+<p>We see that the total time is approximately halved by switching to a matrix indexer. This is fairly nice. Maybe there are even better ways to speed this memory allocation. Maybe the code is so badly written it has to be totally rewritten. (it is a first attempt at parallelization)</p>
 </div>
 
 
