@@ -18,21 +18,21 @@ knapsack_matr <- knapsack_gener_matr()
 knapsack_df <- knapsack_generator()
 
 ## ------------------------------------------------------------------------
-
-
-tmp <- tempfile()
-Rprof(tmp,interval = 0.001)
-brute_force_knapsack(knapsack_matr[1:15,], W = 2000)
-Rprof(NULL)
-summaryRprof(tmp)
-
-
-tmp <- tempfile()
-Rprof(tmp,interval = 0.001)
-brute_force_knapsack(knapsack_df[1:15,], W = 2000)
-Rprof(NULL)
-summaryRprof(tmp)
+ 
+ 
+ tmp <- tempfile()
+ Rprof(tmp,interval = 0.001)
+ brute_force_knapsack(knapsack_matr[1:15,], W = 2000)
+ Rprof(NULL)
+ summaryRprof(tmp)
+ 
+ 
+ tmp <- tempfile()
+ Rprof(tmp,interval = 0.001)
+ brute_force_knapsack(knapsack_df[1:15,], W = 2000)
+ Rprof(NULL)
+ summaryRprof(tmp)
 
 ## ------------------------------------------------------------------------
-#system.time(brute_force_knapsack(knapsack_generator()[1:16,],W =2000), parallel = TRUE)
+#system.time(brute_force_knapsack(knapsack_generator()[1:16,],W =2000, parallel = TRUE))
 

@@ -65,20 +65,20 @@ knapsack_df <- knapsack_generator()
 ```
 
 ```{r}
-
-
-tmp <- tempfile()
-Rprof(tmp,interval = 0.001)
-brute_force_knapsack(knapsack_matr[1:15,], W = 2000)
-Rprof(NULL)
-summaryRprof(tmp)
-
-
-tmp <- tempfile()
-Rprof(tmp,interval = 0.001)
-brute_force_knapsack(knapsack_df[1:15,], W = 2000)
-Rprof(NULL)
-summaryRprof(tmp)
+ 
+ 
+ tmp <- tempfile()
+ Rprof(tmp,interval = 0.001)
+ brute_force_knapsack(knapsack_matr[1:15,], W = 2000)
+ Rprof(NULL)
+ summaryRprof(tmp)
+ 
+ 
+ tmp <- tempfile()
+ Rprof(tmp,interval = 0.001)
+ brute_force_knapsack(knapsack_df[1:15,], W = 2000)
+ Rprof(NULL)
+ summaryRprof(tmp)
 ```
 
 It can be seen that using the matrix the function is faster of more than 1 second.
@@ -87,5 +87,7 @@ It can be seen that using the matrix the function is faster of more than 1 secon
 We added an argument, `parallel`, in the brute force function that when it is set to TRUE the function parallelize over the multiple cores. We used a computer with 8 cores.
 
 ```{r}
-#system.time(brute_force_knapsack(knapsack_generator()[1:16,],W =2000), parallel = TRUE)
+#system.time(brute_force_knapsack(knapsack_generator()[1:16,],W =2000, parallel = TRUE))
 ```
+
+The time to compute this function is less than a second. The time for the same function without parallelizing was about 28 seconds so it can be seen that the performance is improved.

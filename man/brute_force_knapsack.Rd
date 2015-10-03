@@ -12,7 +12,7 @@ brute_force_knapsack(x, W, parallel = FALSE)
 
 \item{W}{A numeric scalar which is the limit of the weight the knapsack can carry.}
 
-\item{parallel}{It is set to FALSE as default, if you set it to TRUE the function will be paralellized.}
+\item{parallel}{It is set to FALSE as default, if you set it to TRUE the function will be parallellized.}
 }
 \value{
 \code{list} A list with names \code{$value}, telling the maximum value of the knapsack
