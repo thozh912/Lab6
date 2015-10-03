@@ -8,51 +8,52 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+## Package Info
+The Knapsack package contains three different function to solve the knapsack problem. 
+In the Knapsack problem we have a knapsack with a limited weight W and a  number of items i, each with a weight $w_{i}$ and a value $v_{i}$. The goal of the problem is to fill the knapsack with the items so that the total weight is less than or equal to W and the total value is as large as possible. 
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+The three functions take as input a Data frame with variables v and w, which have to be positive values.
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+## Brute force search 
+This function solves the Knapsack probem by brute force.
 
-## Vignette Info
-
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+For example:
+```{r}
+#brute_force_knapsack(data.frame(w=c(29,11,4,50,33,9,20,6 ),v=c(2,7,11,2,9,33,6,45 )),W =20)
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+```{r, echo = FALSE}
+#Sys.time()
+#brute_force_knapsack(data.frame(w=c(29,11,4,50,33,9,20,6 ),v=c(2,7,11,2,9,33,6,45 )),W =20)
+#Sys.time()
 ```
 
-Also a quote using `>`:
+## Dynamic programming 
+This function solves the 0/1 Knapsack problem using dynamic programming.
+```{r}
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+```
+
+## Greedy heuristic
+This function solves the Knapsack problem using a greedy heuristic approach. It does not return an exact result but is computationally faster than the other approaches in this package. 
+
+```{r}
+
+```
+
+
+## Profiling
+
+
+
+```{r, echo=FALSE}
+
+```
+
+## Parallelize Brute force search 
+We added an argument, `parallel`, in the brute force function that when it is set to TRUE the function parallelize over the multiple cores. We used a computer with 8 cores.
+
+```{r, echo=FALSE}
+
+```
