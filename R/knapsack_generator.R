@@ -13,10 +13,13 @@
 knapsack_generator<-function(){
   set.seed(42)
   n <- 1000000
+  w=sample(1:4000, size = n, replace = TRUE)
+  set.seed(42)
+  v=runif(n = n, 0, 10000)
   knapsack_objects <-
     data.frame(
-      w=sample(1:4000, size = n, replace = TRUE),
-      v=runif(n = n, 0, 10000)
+      w,
+      v
     )
   return(knapsack_objects)
 }

@@ -12,7 +12,7 @@
 #'  
 #'  @param W A numeric scalar which is the limit of the weight the knapsack can carry.
 #'  
-#'  @param parallel It is set to FALSE as default, if you set it to TRUE the function will be paralellized.
+#'  @param parallel It is set to FALSE as default, if you set it to TRUE the function will be parallellized.
 #'  
 #'  @return \code{list} A list with names \code{$value}, telling the maximum value of the knapsack
 #'  and \code{$elements} which indicates which row objects in data.frame \code{x} was put
@@ -38,24 +38,28 @@ brute_force_knapsack <- function(x,W, parallel = FALSE){
       weightsum <- 0
       valuesum <- 0
       packetschosen <-0
-      i <- 1:2^length(x[,1])-1
+      i <- 1:(2^length(x[,1])-1)
       j <- 1:32
       iandj <- expand.grid(j=j,i=i)
       
       binary <- intToBits(iandj$i[rownum])
       
       if( binary[iandj$j[rownum]] == TRUE ){
-        weightsum <- weightsum + x[iandj$j[rownum],1]
-        valuesum <- valuesum + x[iandj$j[rownum],2]
+        #print(paste("found",iandj$j[rownum],"in",iandj$i[rownum]))
+        weightsum <- weightsum + unname(x[iandj$j[rownum],1])
+        
+        valuesum <- valuesum + unname(x[iandj$j[rownum],2])
+        
         packetschosen <- iandj$j[rownum]
       }
       
-      
+      #print(list(w=weightsum,v=valuesum,p=packetschosen))
       return(list(w=weightsum,v=valuesum,p=packetschosen))
+      
       
     }
     
-    listres <- parallel::mclapply(1:rownum,testfunc, mc.cores = 8)
+    listres <- parallel::mclapply(1:rownum,testfunc, mc.cores = 1)
     
     resvec <- unlist(listres) 
     
@@ -63,15 +67,18 @@ brute_force_knapsack <- function(x,W, parallel = FALSE){
       start <- 96*(i-1)+1
       end <- 96*i
       temp1 <- resvec[start:end]
+      
       weightsum <- sum(temp1[which(names(temp1) == "w")])
+      weightsum <- unname(weightsum)
       valuesum <- sum(temp1[which(names(temp1) == "v")])
+      valuesum <-unname(valuesum)
       packetschosen <- temp1[which(names(temp1) == "p")]
       packetschosen <- packetschosen[-which(packetschosen == 0)]
       packetschosen <-unname(packetschosen)
       return(list(w=weightsum,v=valuesum,p=packetschosen))
     }
     
-    listres2 <- parallel::mclapply(1:(rownum * 3 / 96),testfunc2, mc.cores = 8)
+    listres2 <- parallel::mclapply(2:((rownum * 3 / 96)+1),testfunc2, mc.cores = 1)
     
     lengthy <-length(listres2)
     
@@ -79,16 +86,16 @@ brute_force_knapsack <- function(x,W, parallel = FALSE){
       if(listres2[[number]]$w > W){
         return(list(v=0,p=c(0,0)))
       }else{
-        return(list(v=listres2[[number]]$v,p=listres2[[number]]$p))
+        return(list(v=unname(listres2[[number]]$v),p=unname(listres2[[number]]$p)))
       }
     }
     
-    listres3 <- parallel::mclapply(1:lengthy,testfunc3, mc.cores = 8)
+    listres3 <- parallel::mclapply(1:lengthy,testfunc3, mc.cores = 1)
     values <- unlist(listres3)
     values <- values[which(names(values)=="v")]
     winnervalue <- max(values)
     winnerpackets <- max.col(matrix(values,nrow=1)) 
-    return(list(value=round(winnervalue),elements = listres3[[winnerpackets]]$p))
+    return(list(value=round(unname(winnervalue)),elements = listres3[[winnerpackets]]$p))
     
   }
   else{
