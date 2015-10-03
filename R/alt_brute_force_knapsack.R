@@ -19,13 +19,13 @@
 #'  in the knapsack.
 #'  
 #'  @examples
-#'  brute_force_knapsack(data.frame(w=c(20,30,40,50),v=c(2,2,1,2)),W =20, parallel = FALSE)
+#'  alt_brute_force_knapsack(data.frame(w=c(20,30,40,50),v=c(2,2,1,2)),W =20, parallel = FALSE)
 #'  
 #'  @references \url{http://en.wikipedia.org/wiki/Knapsack_problem}  
 #'
 
 
-brute_force_knapsack <- function(x,W, parallel = FALSE){
+alt_brute_force_knapsack <- function(x,W, parallel = FALSE){
   #stopifnot(is.data.frame(x) & x > 0 & names(x) == c("w","v"))
   if(parallel == TRUE){
     winnervalue <- 0
@@ -40,17 +40,23 @@ brute_force_knapsack <- function(x,W, parallel = FALSE){
       packetschosen <-0
       i <- 1:(2^length(x[,1])-1)
       j <- 1:32
-      iandj <- expand.grid(j=j,i=i)
       
-      binary <- intToBits(iandj$i[rownum])
+      # Let us try to manually create an indexer corresponding  to the expand.grid() call as a matrix
       
-      if( binary[iandj$j[rownum]] == TRUE ){
+      #iandj <- expand.grid(j=j,i=i)
+      
+      iandj <- matrix(c(rep(j,i[length(i)]),rep(i,each=32)),ncol=2)
+    
+      #binary <- intToBits(iandj$i[rownum])
+      binary <- intToBits(iandj[rownum,2])
+      
+      #if( binary[iandj$j[rownum]] == TRUE ){
+       if(binary[iandj[rownum,1]] == TRUE){ 
+        weightsum <- weightsum + unname(x[iandj[rownum,1],1])
         
-        weightsum <- weightsum + unname(x[iandj$j[rownum],1])
+        valuesum <- valuesum + unname(x[iandj[rownum,1],2])
         
-        valuesum <- valuesum + unname(x[iandj$j[rownum],2])
-        
-        packetschosen <- iandj$j[rownum]
+        packetschosen <- iandj[rownum,1]
       }
       
       

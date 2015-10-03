@@ -17,7 +17,7 @@ The three functions take as input a Data frame with variables v and w, which hav
 ## Brute force search 
 This function solves the Knapsack probem by brute force.
 
-For example. for n = 16 objects:
+For example. for `n = 16` objects:
 ```{r, echo = FALSE, message = FALSE}
 library(Lab6)
 ```
@@ -34,23 +34,23 @@ The brute force function takes around 27 seconds to run the algorithm for n = 16
 ## Dynamic programming 
 This function solves the 0/1 Knapsack problem using dynamic programming.
 
-For example, for n = 500 objects: 
+For example, for `n = 500` objects: 
 ```{r}
 #system.time(knapsack_dynamic(knapsack_generator()[1:500,],W =2000))
 ```
 
-The dynamic function takes around 38 seconds to run the algorithm for n = 500 objects.
+The dynamic function takes around 38 seconds to run the algorithm for `n = 500` objects.
 
 
 ## Greedy heuristic
 This function solves the Knapsack problem using a greedy heuristic approach. It does not return an exact result but is computationally faster than the other approaches in this package. 
 
-For example, for n = 1000000 objects: 
+For example, for `n = 1000000` objects: 
 ```{r}
 #system.time(greedy_knapsack(knapsack_generator()[1:1000000,],W =2000))
 ```
 
-The greedy heuristic function takes around 50 seconds to run the algorithm for n = 1000000 objects.
+The greedy heuristic function takes around 50 seconds to run the algorithm for `n = 1000000` objects.
 
 
 ## Profiling
@@ -68,24 +68,40 @@ knapsack_df <- knapsack_generator()
 
 
 tmp <- tempfile()
-Rprof(tmp,interval = 0.001)
+Rprof(tmp,interval = 0.01)
 brute_force_knapsack(knapsack_matr[1:15,], W = 2000)
 Rprof(NULL)
-summaryRprof(tmp)
+summaryRprof(tmp)$by.self
 
 
 tmp <- tempfile()
-Rprof(tmp,interval = 0.001)
+Rprof(tmp,interval = 0.01)
 brute_force_knapsack(knapsack_df[1:15,], W = 2000)
 Rprof(NULL)
-summaryRprof(tmp)
+summaryRprof(tmp)$by.self
 ```
 
-It can be seen that using the matrix the function is faster of more than 1 second.
+It can be seen that using the matrix the function is alot faster. Further improvements which the profiling suggests are possible include replacing / division in the greedy knapsack algorithm with a division algorithm of some sort. Attempts at replacing the `max()` function in the dynamic programming algorithm with `if` block did not improve performance.
 
 ## Parallelize Brute force search 
 We added an argument, `parallel`, in the brute force function that when it is set to TRUE the function parallelize over the multiple cores. We used a computer with 8 cores.
 
 ```{r}
-#system.time(brute_force_knapsack(knapsack_generator()[1:16,],W =2000), parallel = TRUE)
+  tmp <- tempfile()
+  Rprof(tmp,interval = 0.01)
+  brute_force_knapsack(knapsack_matr[1:10,], W = 2000, parallel = TRUE)
+  Rprof(NULL)
+  summaryRprof(tmp)$by.self
 ```
+
+This function is torturously slow due mainly to its huge `expand.grid()` function call that it creates a lot of times. Let us try to manually create the very same indexing array which `expand.grid()` creates. We shall try a matrix.
+
+```{r}
+  tmp <- tempfile()
+  Rprof(tmp,interval = 0.01)
+  alt_brute_force_knapsack(knapsack_matr[1:10,], W = 2000, parallel = TRUE)
+  Rprof(NULL)
+  summaryRprof(tmp)$by.self
+```
+
+We see that the total time is approximately halved by switching to a matrix indexer. This is fairly nice. Maybe there are even better ways to speed this memory allocation. Maybe the code is so badly written it has to be totally rewritten. (it is a first attempt at parallelization)
