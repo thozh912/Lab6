@@ -67,6 +67,7 @@ knapsack_df <- knapsack_generator()
 ```{r}
 
 
+
 tmp <- tempfile()
 Rprof(tmp,interval = 0.01)
 brute_force_knapsack(knapsack_matr[1:15,], W = 2000)
@@ -79,6 +80,7 @@ Rprof(tmp,interval = 0.01)
 brute_force_knapsack(knapsack_df[1:15,], W = 2000)
 Rprof(NULL)
 summaryRprof(tmp)$by.self
+
 ```
 
 It can be seen that using the matrix the function is alot faster. Further improvements which the profiling suggests are possible include replacing / division in the greedy knapsack algorithm with a division algorithm of some sort. Attempts at replacing the `max()` function in the dynamic programming algorithm with `if` block did not improve performance.
@@ -87,6 +89,7 @@ It can be seen that using the matrix the function is alot faster. Further improv
 We added an argument, `parallel`, in the brute force function that when it is set to TRUE the function parallelize over the multiple cores. We used a computer with 8 cores.
 
 ```{r}
+
   tmp <- tempfile()
   Rprof(tmp,interval = 0.01)
   brute_force_knapsack(knapsack_matr[1:10,], W = 2000, parallel = TRUE)
@@ -105,3 +108,4 @@ This function is torturously slow due mainly to its huge `expand.grid()` functio
 ```
 
 We see that the total time is approximately halved by switching to a matrix indexer. This is fairly nice. Maybe there are even better ways to speed this memory allocation. Maybe the code is so badly written it has to be totally rewritten. (it is a first attempt at parallelization)
+
