@@ -23,7 +23,7 @@ This function solves the Knapsack problem using a greedy heuristic approach.
  approaches in this package.
 }
 \examples{
-greedy_knapsack(data.frame(w=c(20,30,40,50),v=c(2,2,1,2)),W =200)
+greedy_knapsack(data.frame(w=c(20,30,40,50),v=c(2,2,1,2)), W =200)
 }
 \references{
 \url{http://en.wikipedia.org/wiki/Knapsack_problem}

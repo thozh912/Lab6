@@ -4,13 +4,15 @@
 \alias{brute_force_knapsack}
 \title{Brute force solver of Knapsack problem}
 \usage{
-brute_force_knapsack(x, W)
+brute_force_knapsack(x, W, parallel = FALSE)
 }
 \arguments{
 \item{x}{A data.frame with two columns named in order \code{"w"} and \code{"v"}
  Every row in \code{x} is an object with weight \code{w} and value \code{v}.}
 
 \item{W}{A numeric scalar which is the limit of the weight the knapsack can carry.}
+
+\item{parallel}{It is set to FALSE as default, if you set it to TRUE the function will be paralellized.}
 }
 \value{
 \code{list} A list with names \code{$value}, telling the maximum value of the knapsack
@@ -27,7 +29,7 @@ of as high a total value as possible. Every object has a positive
 weight and value associated with itself.
 }
 \examples{
-brute_force_knapsack(data.frame(w=c(20,30,40,50),v=c(2,2,1,2)),W =20)
+brute_force_knapsack(data.frame(w=c(20,30,40,50),v=c(2,2,1,2)),W =20, parallel = FALSE)
 }
 \references{
 \url{http://en.wikipedia.org/wiki/Knapsack_problem}
