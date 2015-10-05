@@ -10,7 +10,7 @@
 
 <meta name="author" content="Andrea Bruzzone, Thomas Zhang" />
 
-<meta name="date" content="2015-10-04" />
+<meta name="date" content="2015-10-05" />
 
 <title>Lab6</title>
 
@@ -54,7 +54,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <div id="header">
 <h1 class="title">Lab6</h1>
 <h4 class="author"><em>Andrea Bruzzone, Thomas Zhang</em></h4>
-<h4 class="date"><em>2015-10-04</em></h4>
+<h4 class="date"><em>2015-10-05</em></h4>
 </div>
 
 
@@ -67,21 +67,27 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <h2>Brute force search</h2>
 <p>This function solves the Knapsack probem by brute force.</p>
 <p>For example. for <code>n = 16</code> objects:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#system.time(brute_force_knapsack(knapsack_generator()[1:16,],W =2000))</span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">brute_force_knapsack</span>(<span class="kw">knapsack_generator</span>()[<span class="dv">1</span>:<span class="dv">16</span>,],<span class="dt">W =</span><span class="dv">2000</span>))</code></pre>
+<pre><code>##    user  system elapsed 
+##  26.668   0.084  26.760</code></pre>
 <p>The brute force function takes around 27 seconds to run the algorithm for n = 16 objects.</p>
 </div>
 <div id="dynamic-programming" class="section level2">
 <h2>Dynamic programming</h2>
 <p>This function solves the 0/1 Knapsack problem using dynamic programming.</p>
 <p>For example, for <code>n = 500</code> objects:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#system.time(knapsack_dynamic(knapsack_generator()[1:500,],W =2000))</span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">knapsack_dynamic</span>(<span class="kw">knapsack_generator</span>()[<span class="dv">1</span>:<span class="dv">500</span>,],<span class="dt">W =</span><span class="dv">2000</span>))</code></pre>
+<pre><code>##    user  system elapsed 
+##  39.754   0.102  39.879</code></pre>
 <p>The dynamic function takes around 38 seconds to run the algorithm for <code>n = 500</code> objects.</p>
 </div>
 <div id="greedy-heuristic" class="section level2">
 <h2>Greedy heuristic</h2>
 <p>This function solves the Knapsack problem using a greedy heuristic approach. It does not return an exact result but is computationally faster than the other approaches in this package.</p>
 <p>For example, for <code>n = 1000000</code> objects:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#system.time(greedy_knapsack(knapsack_generator()[1:1000000,],W =2000))</span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">system.time</span>(<span class="kw">greedy_knapsack</span>(<span class="kw">knapsack_generator</span>()[<span class="dv">1</span>:<span class="dv">1000000</span>,],<span class="dt">W =</span><span class="dv">2000</span>))</code></pre>
+<pre><code>##    user  system elapsed 
+##  45.842   0.105  45.961</code></pre>
 <p>The greedy heuristic function takes around 50 seconds to run the algorithm for <code>n = 1000000</code> objects.</p>
 </div>
 <div id="profiling" class="section level2">
@@ -99,16 +105,14 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Rprof</span>(<span class="ot">NULL</span>)
 <span class="kw">summaryRprof</span>(tmp)$by.self</code></pre>
 <pre><code>##                        self.time self.pct total.time total.pct
-## &quot;brute_force_knapsack&quot;      1.25    76.22       1.64    100.00
-## &quot;==&quot;                        0.14     8.54       0.14      8.54
-## &quot;+&quot;                         0.09     5.49       0.09      5.49
-## &quot;c&quot;                         0.05     3.05       0.05      3.05
-## &quot;&gt;&quot;                         0.04     2.44       0.04      2.44
-## &quot;intToBits&quot;                 0.03     1.83       0.03      1.83
-## &quot;&amp;&quot;                         0.01     0.61       0.01      0.61
-## &quot;:&quot;                         0.01     0.61       0.01      0.61
-## &quot;&lt;=&quot;                        0.01     0.61       0.01      0.61
-## &quot;length&quot;                    0.01     0.61       0.01      0.61</code></pre>
+## &quot;brute_force_knapsack&quot;      1.06    70.20       1.51    100.00
+## &quot;+&quot;                         0.16    10.60       0.16     10.60
+## &quot;==&quot;                        0.15     9.93       0.15      9.93
+## &quot;:&quot;                         0.04     2.65       0.04      2.65
+## &quot;c&quot;                         0.04     2.65       0.04      2.65
+## &quot;intToBits&quot;                 0.03     1.99       0.03      1.99
+## &quot;&gt;&quot;                         0.02     1.32       0.02      1.32
+## &quot;&amp;&quot;                         0.01     0.66       0.01      0.66</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">tmp &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
 <span class="kw">Rprof</span>(tmp,<span class="dt">interval =</span> <span class="fl">0.01</span>)
 <span class="kw">brute_force_knapsack</span>(knapsack_df[<span class="dv">1</span>:<span class="dv">15</span>,], <span class="dt">W =</span> <span class="dv">2000</span>)</code></pre>
@@ -120,26 +124,27 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Rprof</span>(<span class="ot">NULL</span>)
 <span class="kw">summaryRprof</span>(tmp)$by.self</code></pre>
 <pre><code>##                        self.time self.pct total.time total.pct
-## &quot;[.data.frame&quot;              4.17    47.88       7.05     80.94
-## &quot;brute_force_knapsack&quot;      1.01    11.60       8.71    100.00
-## &quot;match&quot;                     0.52     5.97       1.06     12.17
-## &quot;names&quot;                     0.50     5.74       0.50      5.74
-## &quot;sys.call&quot;                  0.48     5.51       0.48      5.51
-## &quot;length&quot;                    0.46     5.28       0.46      5.28
-## &quot;%in%&quot;                      0.31     3.56       1.37     15.73
-## &quot;[&quot;                         0.30     3.44       7.35     84.39
-## &quot;==&quot;                        0.25     2.87       0.25      2.87
-## &quot;.subset&quot;                   0.23     2.64       0.23      2.64
-## &quot;all&quot;                       0.11     1.26       0.11      1.26
-## &quot;anyNA&quot;                     0.09     1.03       0.09      1.03
-## &quot;c&quot;                         0.08     0.92       0.08      0.92
-## &quot;dim&quot;                       0.06     0.69       0.06      0.69
-## &quot;.subset2&quot;                  0.05     0.57       0.05      0.57
-## &quot;+&quot;                         0.04     0.46       0.04      0.46
-## &quot;nargs&quot;                     0.03     0.34       0.03      0.34
-## &quot;&amp;&quot;                         0.01     0.11       0.01      0.11
-## &quot;:&quot;                         0.01     0.11       0.01      0.11</code></pre>
-<p>It can be seen that using the matrix the function is alot faster. Further improvements which the profiling suggests are possible include replacing / division in the greedy knapsack algorithm with a division algorithm of some sort. Attempts at replacing the <code>max()</code> function in the dynamic programming algorithm with <code>if</code> block did not improve performance.</p>
+## &quot;[.data.frame&quot;              3.69    45.39       6.36     78.23
+## &quot;brute_force_knapsack&quot;      0.95    11.69       8.12     99.88
+## &quot;names&quot;                     0.56     6.89       0.56      6.89
+## &quot;match&quot;                     0.44     5.41       0.88     10.82
+## &quot;[&quot;                         0.43     5.29       6.79     83.52
+## &quot;length&quot;                    0.40     4.92       0.40      4.92
+## &quot;sys.call&quot;                  0.35     4.31       0.35      4.31
+## &quot;%in%&quot;                      0.32     3.94       1.20     14.76
+## &quot;.subset&quot;                   0.31     3.81       0.31      3.81
+## &quot;==&quot;                        0.23     2.83       0.23      2.83
+## &quot;c&quot;                         0.11     1.35       0.11      1.35
+## &quot;all&quot;                       0.10     1.23       0.10      1.23
+## &quot;.subset2&quot;                  0.07     0.86       0.07      0.86
+## &quot;dim&quot;                       0.06     0.74       0.06      0.74
+## &quot;anyNA&quot;                     0.04     0.49       0.04      0.49
+## &quot;+&quot;                         0.03     0.37       0.03      0.37
+## &quot;&lt;Anonymous&gt;&quot;               0.01     0.12       8.13    100.00
+## &quot;&amp;&quot;                         0.01     0.12       0.01      0.12
+## &quot;&lt;=&quot;                        0.01     0.12       0.01      0.12
+## &quot;intToBits&quot;                 0.01     0.12       0.01      0.12</code></pre>
+<p>It can be seen that using the matrix the function is a lot faster. Further improvements which the profiling suggests are possible include replacing / division in the greedy knapsack algorithm with a division algorithm of some sort. Attempts at replacing the <code>max()</code> function in the dynamic programming algorithm with <code>if</code> block did not improve performance.</p>
 </div>
 <div id="parallelize-brute-force-search" class="section level2">
 <h2>Parallelize Brute force search</h2>
@@ -155,13 +160,12 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <pre class="sourceCode r"><code class="sourceCode r">  <span class="kw">Rprof</span>(<span class="ot">NULL</span>)
   <span class="kw">summaryRprof</span>(tmp)$by.self</code></pre>
 <pre><code>##               self.time self.pct total.time total.pct
-## &quot;unserialize&quot;      0.06    37.50       0.06     37.50
-## &quot;unlist&quot;           0.03    18.75       0.16    100.00
-## &quot;&lt;Anonymous&gt;&quot;      0.02    12.50       0.16    100.00
-## &quot;mcfork&quot;           0.02    12.50       0.02     12.50
-## &quot;lapply&quot;           0.01     6.25       0.16    100.00
-## &quot;readChild&quot;        0.01     6.25       0.01      6.25
-## &quot;which&quot;            0.01     6.25       0.01      6.25</code></pre>
+## &quot;unserialize&quot;      0.07    38.89       0.07     38.89
+## &quot;unlist&quot;           0.05    27.78       0.18    100.00
+## &quot;lapply&quot;           0.03    16.67       0.18    100.00
+## &quot;file.exists&quot;      0.01     5.56       0.01      5.56
+## &quot;mcfork&quot;           0.01     5.56       0.01      5.56
+## &quot;readChild&quot;        0.01     5.56       0.01      5.56</code></pre>
 <p>This function is torturously slow due mainly to its huge <code>expand.grid()</code> function call that it creates a lot of times. Let us try to manually create the very same indexing array which <code>expand.grid()</code> creates. We shall try a matrix.</p>
 <pre class="sourceCode r"><code class="sourceCode r">  tmp &lt;-<span class="st"> </span><span class="kw">tempfile</span>()
   <span class="kw">Rprof</span>(tmp,<span class="dt">interval =</span> <span class="fl">0.01</span>)
@@ -173,18 +177,13 @@ code > span.er { color: #ff0000; font-weight: bold; }
 ## [1] 3 8</code></pre>
 <pre class="sourceCode r"><code class="sourceCode r">  <span class="kw">Rprof</span>(<span class="ot">NULL</span>)
   <span class="kw">summaryRprof</span>(tmp)$by.self</code></pre>
-<pre><code>##              self.time self.pct total.time total.pct
-## &quot;matrix&quot;         53.27    82.70      64.24     99.74
-## &quot;c&quot;              10.96    17.02      10.96     17.02
-## &quot;FUN&quot;             0.05     0.08      64.41    100.00
-## &quot;:&quot;               0.04     0.06       0.04      0.06
-## &quot;unlist&quot;          0.02     0.03      64.41    100.00
-## &quot;unname&quot;          0.02     0.03       0.02      0.03
-## &quot;-&quot;               0.01     0.02       0.01      0.02
-## &quot;Sys.getenv&quot;      0.01     0.02       0.01      0.02
-## &quot;length&quot;          0.01     0.02       0.01      0.02
-## &quot;list&quot;            0.01     0.02       0.01      0.02
-## &quot;which&quot;           0.01     0.02       0.01      0.02</code></pre>
+<pre><code>##          self.time self.pct total.time total.pct
+## &quot;matrix&quot;     50.09    81.46      61.33     99.74
+## &quot;c&quot;          11.24    18.28      11.24     18.28
+## &quot;:&quot;           0.08     0.13       0.08      0.13
+## &quot;FUN&quot;         0.05     0.08      61.49    100.00
+## &quot;unlist&quot;      0.02     0.03      61.49    100.00
+## &quot;==&quot;          0.01     0.02       0.01      0.02</code></pre>
 <p>We see that the total time is approximately halved by switching to a matrix indexer. This is fairly nice. Maybe there are even better ways to speed this memory allocation. Maybe the code is so badly written it has to be totally rewritten. (it is a first attempt at parallelization)</p>
 </div>
 

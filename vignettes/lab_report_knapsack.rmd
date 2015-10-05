@@ -65,15 +65,15 @@ knapsack_df <- knapsack_generator()
 ```
 
 ```{r}
-
-
-
 tmp <- tempfile()
 Rprof(tmp,interval = 0.01)
 brute_force_knapsack(knapsack_matr[1:15,], W = 2000)
 Rprof(NULL)
 summaryRprof(tmp)$by.self
 
+```
+
+```{r}
 
 tmp <- tempfile()
 Rprof(tmp,interval = 0.01)
