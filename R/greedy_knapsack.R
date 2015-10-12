@@ -31,18 +31,22 @@ greedy_knapsack <- function(x, W){
   sortedvalues <- x[,2][sortlist$ix]
   totalweights <- 0
   totalvalues <- 0
+  pickedindex <-c()
   i <- 1
  while(totalweights <= W & i <= length(sortedweights)){
    if(sortedweights[i] + totalweights > W){
-     break
+     i <- i+1
+     next 
    }
    else{
    totalweights <- sortedweights[i] + totalweights
    totalvalues <- sortedvalues[i] + totalvalues
+   pickedindex <-c(pickedindex,i)
    i <- i+1
    }
+   
  }
-  result <- list(value = totalvalues, elements = sortlist$ix[1:i-1])
+  result <- list(value = totalvalues, elements = sortlist$ix[pickedindex])
   return(result)
 }
 
