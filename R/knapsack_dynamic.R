@@ -27,12 +27,9 @@ knapsack_dynamic <- function(x, W){
     for(j in 0:W){
       if( x[i,1] <= j) {
 # Trying to improve max() performance, not very useful.
+        m[i+1,j+1] <- max((m[i, j+1-x[i, 1]] + x[i, 2]) ,  m[i, j+1])
         
-          if((m[i, j+1-x[i, 1]] + x[i, 2]) >  m[i, j+1]){
-            m[i+1,j+1] <- m[i, j+1-x[i, 1]] + x[i, 2]
-          } else{
-            m[i+1,j+1] <- m[i, j+1]
-          }
+
       }
       else {
         
