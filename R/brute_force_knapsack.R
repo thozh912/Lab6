@@ -28,6 +28,7 @@
 brute_force_knapsack <- function(x,W, parallel = FALSE){
 ###stopifnot(is.data.frame(x) & x > 0 & names(x) == c("w","v"))
   if(parallel == TRUE){
+    cores <- parallel::detectCores()
     winnervalue <- 0
     winnerpackets <-c()
     rownum <- (2^length(x[,1])-1) * 32
@@ -59,7 +60,7 @@ brute_force_knapsack <- function(x,W, parallel = FALSE){
       
     }
     
-    listres <- parallel::mclapply(1:rownum,testfunc, mc.cores = 8)
+    listres <- parallel::mclapply(1:rownum,testfunc, mc.cores = cores)
     
     resvec <- unlist(listres) 
     
@@ -78,7 +79,7 @@ brute_force_knapsack <- function(x,W, parallel = FALSE){
       return(list(w=weightsum,v=valuesum,p=packetschosen))
     }
     
-    listres2 <- parallel::mclapply(1:(rownum * 3 / 96),testfunc2, mc.cores = 8)
+    listres2 <- parallel::mclapply(1:(rownum * 3 / 96),testfunc2, mc.cores = cores)
     
     lengthy <-length(listres2)
     
@@ -90,7 +91,7 @@ brute_force_knapsack <- function(x,W, parallel = FALSE){
       }
     }
     
-    listres3 <- parallel::mclapply(1:lengthy,testfunc3, mc.cores = 8)
+    listres3 <- parallel::mclapply(1:lengthy,testfunc3, mc.cores = cores)
     
     values <- unlist(listres3)
     values <- values[which(names(values)=="v")]
