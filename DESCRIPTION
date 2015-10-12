@@ -9,7 +9,7 @@ Authors@R: c(
     )
 Description: This package contains performant code for the knapsack problem.
 License: CC0
-Imports:
+Imports: parallel
 Depends: R (>= 3.1.0), knitr
 Suggests: knitr,
     testthat
