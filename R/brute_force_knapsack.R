@@ -26,7 +26,7 @@
 
 
 brute_force_knapsack <- function(x,W, parallel = FALSE){
-  #stopifnot(is.data.frame(x) & x > 0 & names(x) == c("w","v"))
+###stopifnot(is.data.frame(x) & x > 0 & names(x) == c("w","v"))
   if(parallel == TRUE){
     winnervalue <- 0
     winnerpackets <-c()
